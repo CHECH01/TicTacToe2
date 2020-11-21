@@ -1,11 +1,13 @@
 package tictactoe2;
 
-import java.util.Scanner;
-
 public class TicTacToe {
 	
-	private Scanner input = new Scanner(System.in);
-	private Board myBoard = new Board();
+	private Board 		myBoard 	= new Board();
+	private GuiBoard	myGUIBoard 	= new GuiBoard();
+	private Maquina 	maquina 	= new Maquina();
+	private Player 		player 		= new Player();
+	
+	private String		winner		= "";
 	
 	public boolean isWinner(String [][] board) {
 		boolean isWinner = false;
@@ -14,16 +16,16 @@ public class TicTacToe {
 			for (int j = 0; j < board.length; j++) {
 				
 				if ( j == 0 && isWinner == false)// horizontal
-					isWinner = checkWin(i,j,board,0,1);
+					isWinner = isWinner(i,j,board,0,1);
 				
 				if (i == 0 && isWinner == false) // vertical
-					isWinner = checkWin(i,j,board,1,0);
+					isWinner = isWinner(i,j,board,1,0);
 				
 				if (i == 0 && j == 0 && isWinner == false) // diagonal 1
-					isWinner = checkWin(i,j,board,1,1);
+					isWinner = isWinner(i,j,board,1,1);
 				
 				if (i == 0 && j == board.length-1 && isWinner == false) // diagonal 2
-					isWinner = checkWin(i,j,board,1,-1);
+					isWinner = isWinner(i,j,board,1,-1);
 				
 				if(isWinner)
 					break first;
@@ -31,7 +33,7 @@ public class TicTacToe {
 		}
 		return isWinner;
 	}
-	public boolean checkWin(int i, int j, String board[][],int aux1,int aux2) {
+	public boolean isWinner(int i, int j, String board[][],int aux1,int aux2) {
 		int aux3 = aux1;
 		int aux4 = aux2;
 		int cont = 1;
@@ -44,65 +46,38 @@ public class TicTacToe {
 				break;
 		}while (cont < board.length);
 		
-		if(cont == board.length)
+		if(cont == board.length) {
+			winner = board[i][j];
 			return true;
-		else 
+		}else 
 			return false;
 	}
 	
 	public void play() {
-		String mark = "";
-		int maxMoves = (int)Math.pow(myBoard.getBoard().length, 2);
-		int contMoves = 0;
+		int contMoves;
 		boolean isWinner = false;
 		
 		myBoard.initializeArrayPositions();
+		myGUIBoard.initializeArrayPositions();
 		myBoard.generateEmptyBoard();
-		myBoard.generateEmptyGUIBoard();
-		myBoard.printBoard();
+		myGUIBoard.generateEmptyBoard();
+		myGUIBoard.printBoard();
 		
+		contMoves = myBoard.getPositions().size();
 		do {
-			if(contMoves % 2 == 0) {
-				mark = "X";
-				System.out.print("Player (computer)X move: ");
-				input.nextLine();
-				myBoard.turnoMaquina();
-				
-			}else {
-				mark = "O";
-				System.out.print("Player O move: ");
-				myBoard.mark(getPosition(),mark);
-			}
-			myBoard.printBoard();
+			if(contMoves % 2 != 0)
+				maquina.move(myBoard,myGUIBoard);
+			else
+				player.move(myBoard, myGUIBoard);
+			
+			myGUIBoard.printBoard();
 			isWinner = isWinner(myBoard.getBoard());
-			contMoves++;
-		}while(!isWinner && contMoves < maxMoves);
+			contMoves = myBoard.getPositions().size();
+		}while(!isWinner && contMoves != 0);
 		
-		if(contMoves == maxMoves && !isWinner)
+		if(contMoves == 0 && !isWinner)
 			System.out.print("DRAW!");
 		else
-			System.out.print(mark+" WINNER!!!");	
-	}
-	
-	public String getPosition() {
-		String position = "";
-		boolean wrongMove = true;
-		
-		position = input.nextLine();
-		do {
-			for(int i = 0 ; i < myBoard.getPositions().size(); i++)
-				if(position.contentEquals(myBoard.getPositions().get(i))) {
-					wrongMove = false;
-					myBoard.removeArrayPosition(position);
-					break;
-				}
-			if(wrongMove) {
-				System.out.print("Wrong move, try again: ");
-				position = input.nextLine();
-			}
-				
-		}while(wrongMove);
-		
-		return position;
+			System.out.print(winner+" WINNER!!!");	
 	}
 }
