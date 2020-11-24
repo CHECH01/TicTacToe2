@@ -1,21 +1,24 @@
 package tictactoe2;
 
 public class Board extends AbstractBoard{
-	
-	private static final int BOARD_SIZE = 3;
-	private String[][] board 	= new String[BOARD_SIZE][BOARD_SIZE];
-	
+	private String[][] board ;
+	private int boardSize;
+	public Board(int boardSize) {
+		super(boardSize);
+		this.boardSize = boardSize;
+		board 	= new String[boardSize][boardSize];
+	}
 	public void generateEmptyBoard() {
 		int k = 0;
-		for(int i = 0; i < BOARD_SIZE; i++) 
-			for(int j = 0; j < BOARD_SIZE; j++) {
+		for(int i = 0; i < boardSize; i++) 
+			for(int j = 0; j < boardSize; j++) {
 				board[i][j] = positions.get(k);
 				k++;
 			}
 	}
 	public void mark(String pos, String mark) {
-		for (int i = 0; i < BOARD_SIZE; i++)
-			for (int j = 0; j < BOARD_SIZE; j++)
+		for (int i = 0; i < boardSize; i++)
+			for (int j = 0; j < boardSize; j++)
 				if (board[i][j].contentEquals(pos))
 					board[i][j] = mark;
 	}

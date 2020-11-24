@@ -4,9 +4,11 @@ import java.util.Scanner;
 
 public class Player {
 	Scanner input 	= new Scanner(System.in);
-	String mark 	= "O";
+	String mark;
+	Player(String mark){
+		this.mark = mark;
+	}
 	public void move(Board myBoard, GuiBoard guiBoard) {
-		System.out.print("Player O move: ");
 		String position = getPosition(myBoard);
 		
 		myBoard.mark(position,mark);
