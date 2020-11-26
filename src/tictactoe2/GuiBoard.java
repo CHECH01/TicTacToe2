@@ -2,25 +2,29 @@ package tictactoe2;
 
 public class GuiBoard extends AbstractBoard{
 	
-	private int rows;
-	private int columns;
-	private int boardSize;
+	private int 		rows;
+	private int 		columns;
+	private int 		boardSize;
+	
 	private String[][] 	posBoard;
 	private String[][] 	guiBoard;
+	
 	public GuiBoard(int boardSize) {
 		super(boardSize);
 		this.boardSize = boardSize;
+		
 		rows 		= boardSize*3;
 		columns 	= boardSize*6;
+		
 		posBoard 	= new String[rows+1][columns+1];
 		guiBoard 	= new String[rows+1][columns+1];
 	}
-	public void mark(String pos, String mark) {
+	public void mark(String pos, String symbol) {
 		for (int i = 0; i <= rows; i++)
 			for (int j = 0; j <= columns; j++)
 				if (posBoard[i][j].contentEquals(pos)) {
-					posBoard[i][j] 	= mark;
-					guiBoard[i][j] = mark;
+					posBoard[i][j] 	= symbol;
+					guiBoard[i][j]  = symbol;
 				}
 					
 	}

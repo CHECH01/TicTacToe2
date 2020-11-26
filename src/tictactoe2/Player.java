@@ -4,15 +4,15 @@ import java.util.Scanner;
 
 public class Player {
 	Scanner input 	= new Scanner(System.in);
-	String mark;
-	Player(String mark){
-		this.mark = mark;
+	private String symbol;
+	Player(String symbol){
+		this.symbol = symbol;
 	}
 	public void move(Board myBoard, GuiBoard guiBoard) {
 		String position = getPosition(myBoard);
 		
-		myBoard.mark(position,mark);
-		guiBoard.mark(position,mark);
+		myBoard.mark(position,symbol);
+		guiBoard.mark(position,symbol);
 	}
 	public String getPosition(Board myBoard) {
 		String position = "";

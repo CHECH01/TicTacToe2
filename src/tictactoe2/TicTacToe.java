@@ -6,13 +6,14 @@ public class TicTacToe {
 	
 	private Board 		board;
 	private GuiBoard 	guiBoard;
-	private Maquina		machine;
+	private Computer		machine;
 	private Player 		player;
 	private Player 		player2;
 	
 	private String 		playerSymbol;
 	private String 		machineSymbol;
-	private String 		turn;
+	private String 		firstPlay;
+	private String 		currentPlayer;
 	private String		winner;
 	private int 		boardSize;
 	private boolean 	vsMachineMode;
@@ -63,51 +64,59 @@ public class TicTacToe {
 	}
 	
 	public void play() {
-		int contMoves;
+		String 	replay;
+		int 	contMoves;
 		boolean isWinner = false;
-		board = new Board(boardSize);
-		guiBoard = new GuiBoard(boardSize);
-		player = new Player(playerSymbol);
-		
-		if(vsMachineMode)
-			machine = new Maquina(machineSymbol,playerSymbol);
-		else
-			player2 = new Player(machineSymbol);
-		
-		board.initializeArrayPositions();
-		guiBoard.initializeArrayPositions();
-		
-		board.generateEmptyBoard();
-		guiBoard.generateEmptyBoard();
-		guiBoard.generateEmptyBoard();
-		
-		guiBoard.printBoard();
-		
-		contMoves = board.getPositions().size();
+		menuGameMode();
 		do {
-			if(turn.contentEquals(machineSymbol)) {
-				if(vsMachineMode)
-					machine.move(board,guiBoard);
-				else {
-					System.out.print("Player "+turn+" move: ");
-					player2.move(board, guiBoard);
-				}
-					
-				turn = playerSymbol;
-			}else {
-				System.out.print("Player "+turn+" move: ");
-				player.move(board, guiBoard);
-				turn = machineSymbol;
-			}
-			guiBoard.printBoard();
-			isWinner = isWinner(board.getBoard());
-			contMoves = board.getPositions().size();
-		}while(!isWinner && contMoves != 0);
+			currentPlayer 		= firstPlay;
+			contMoves 	= 0;
+			board 		= new Board(boardSize);
+			guiBoard 	= new GuiBoard(boardSize);
+			player 		= new Player(playerSymbol);
+			if(vsMachineMode)
+				machine = new Computer(machineSymbol,playerSymbol);
+			else
+				player2 = new Player(machineSymbol);
 		
-		if(contMoves == 0 && !isWinner)
-			System.out.print("DRAW!");
-		else
-			System.out.print(winner+" WINNER!!!");	
+			board.initializeArrayPositions();
+			guiBoard.initializeArrayPositions();
+
+			board.generateEmptyBoard();
+			guiBoard.generateEmptyBoard();
+			guiBoard.printBoard();
+
+			contMoves = board.getPositions().size();
+			do {
+				if(currentPlayer.contentEquals(machineSymbol)) {
+					if(vsMachineMode)
+						machine.move(board,guiBoard);
+					else {
+						System.out.print("Player "+currentPlayer+" move: ");
+						player2.move(board, guiBoard);
+					}	
+					currentPlayer = playerSymbol;
+				}else {
+					System.out.print("Player "+currentPlayer+" move: ");
+					player.move(board, guiBoard);
+					currentPlayer = machineSymbol;
+				}
+				guiBoard.printBoard();
+				isWinner = isWinner(board.getBoard());
+				contMoves = board.getPositions().size();
+			}while(!isWinner && contMoves != 0);
+
+			if(contMoves == 0 && !isWinner)
+				System.out.println("DRAW!");
+			else
+				System.out.println(winner+" WINNER!!!");
+
+			System.out.println("Game over. Play again? (y/n)?");
+			System.out.print("-> ");
+			replay = input.next();
+		
+		}while(replay.contentEquals("y"));
+		System.out.print("Thanks for playing :)");
 	}
 	public void menuFirstPlay() {
 		System.out.println("First play? ");
@@ -119,9 +128,9 @@ public class TicTacToe {
 			op = input.nextLine();
 		}while(!op.contentEquals("1") && !op.contentEquals("2"));
 		if(op.contentEquals("1"))
-			turn = playerSymbol;
+			firstPlay = playerSymbol;
 		else 
-			turn = machineSymbol;
+			firstPlay = machineSymbol;
 	}
 	public void menuSymbols() {
 		System.out.println("Choose your symbol: ");
@@ -156,16 +165,14 @@ public class TicTacToe {
 			menuSymbols();
 			menuFirstPlay();
 		}else {
-			
 			do {
 				System.out.print("Board size: ");
 				boardSize = input.nextInt();
 			}while(boardSize < 2);
-			
 			vsMachineMode 	= false;;
 			playerSymbol 	= "X";
 			machineSymbol 	= "O";
-			turn = "X";
+			firstPlay 		= playerSymbol;
 		}
 	}
 }

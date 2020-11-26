@@ -3,6 +3,7 @@ package tictactoe2;
 public class Board extends AbstractBoard{
 	private String[][] board ;
 	private int boardSize;
+
 	public Board(int boardSize) {
 		super(boardSize);
 		this.boardSize = boardSize;
